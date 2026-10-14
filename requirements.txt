@@ -1,0 +1,4 @@
+gym-super-mario-bros>=9.1.0
+python-dotenv>=1.2.3
+typesafe-sdk>=0.6.0
+

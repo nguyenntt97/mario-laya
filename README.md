@@ -1,6 +1,6 @@
 # Mario + Jev
 
-A uv-managed Python prototype that plays NES Super Mario Bros. (level 1-1 by default).
+A Python prototype that plays NES Super Mario Bros. (level 1-1 by default).
 Jev receives structured RAM observations and answers focused questions about movement, starting a jump, and sustaining
 a jump, plus timing hops under low ceilings. Code composes their answers into controller buttons.
 The emulator pauses while Jev responds, then advances up to four game frames by default, stopping early on landing.
@@ -8,8 +8,18 @@ The resizable game window opens at 800×600 by default. No JavaScript is require
 
 ## Setup
 
+Create and activate the Conda environment:
+
 ```sh
-uv sync --locked
+conda env create -f environment.yml
+conda activate mario-jev
+cp .env.example .env
+```
+
+Alternatively, if you already have an existing Python 3.13 environment:
+
+```sh
+pip install -e ".[dev]"
 cp .env.example .env
 ```
 
@@ -21,36 +31,36 @@ TYPESAFE_API_KEY=your-key-here
 
 The key can also be supplied through your shell environment. `.env` and `runs/`
 are ignored by Git. Do not put API keys in gameplay logs or commit them.
-Python 3.13 is selected by `.python-version`; uv installs it if needed.
+Python 3.13 is specified in `environment.yml` and `.python-version`.
 
 ## Play
 
 Try the emulator without API calls:
 
 ```sh
-uv run mario-jev --policy scripted
+mario-jev --policy scripted
 ```
 
 Make a short Jev run first (at most 25 API requests):
 
 ```sh
-uv run mario-jev --decisions 25
+mario-jev --decisions 25
 ```
 
 Then run a longer attempt:
 
 ```sh
-uv run mario-jev --decisions 500
+mario-jev --decisions 500
 ```
 
 Choose a world (1–8) and stage (1–4):
 
 ```sh
 # Next level: 1-2
-uv run mario-jev --world 1 --stage 2 --decisions 500
+mario-jev --world 1 --stage 2 --decisions 500
 
 # World 2, stage 1
-uv run mario-jev --world 2 --stage 1
+mario-jev --world 2 --stage 1
 ```
 
 Both options default to 1. Replay uses the level saved in the log.
@@ -59,15 +69,15 @@ Additional commands:
 
 ```sh
 # Inspect exactly what Jev will see, without calling it
-uv run mario-jev --dump-state --headless
+mario-jev --dump-state --headless
 
 # Run the baseline without a game window
-uv run mario-jev --policy scripted --headless --episodes 3
+mario-jev --policy scripted --headless --episodes 3
 
 # Tune the time each action is held
-uv run mario-jev --frames 4 --decisions 200 --model jev-latest
+mario-jev --frames 4 --decisions 200 --model jev-latest
 
-uv run mario-jev --help
+mario-jev --help
 ```
 
 Each episode resets the selected level, and ends on death, completion, or the decision
@@ -82,19 +92,19 @@ or state dump.
 Replay a recorded gameplay log with no API calls or API key:
 
 ```sh
-uv run mario-jev --replay runs/20260917T051444816158Z.jsonl
+mario-jev --replay runs/20260917T051444816158Z.jsonl
 
 # Twice normal playback speed
-uv run mario-jev --replay runs/20260917T051444816158Z.jsonl --speed 2
+mario-jev --replay runs/20260917T051444816158Z.jsonl --speed 2
 
 # Fast headless verification
-uv run mario-jev --replay runs/20260917T051444816158Z.jsonl --headless
+mario-jev --replay runs/20260917T051444816158Z.jsonl --headless
 ```
 
 Substitute your own timestamped log path. Playback uses the recorded seed,
 controller actions, and actual frames executed, including landing-shortened
 intervals. It checks positions against the log and stops on divergence. Keep
-`uv.lock` and the same game/emulator version for reproducible playback. Visible
+the same environment packages and game/emulator version for reproducible playback. Visible
 playback defaults to normal game speed because there is no model wait. Logs are
 local and excluded from Git; the sample filename refers to the verified local
 successful run, not a bundled recording.
@@ -175,9 +185,9 @@ and reached x=2551 alive.
 ## Development
 
 ```sh
-uv run pytest
-uv run ruff check src tests
-uv run ruff format --check src tests
+pytest
+ruff check src tests
+ruff format --check src tests
 ```
 
 - `src/mario_jev/cli.py`: episode runner and JSONL logging
@@ -185,7 +195,8 @@ uv run ruff format --check src tests
 - `src/mario_jev/history.py`: bounded transition history and jump tracking
 - `src/mario_jev/runner.py`: per-frame observations and landing interruptions
 - `src/mario_jev/policy.py`: Jev choices, button mappings, and scripted baseline
-- `uv.lock`: exact resolved dependency versions
+- `environment.yml`: Conda environment definition
+- `requirements.txt`: pip package dependencies
 
 References: [TypeSafe SDK quick start](https://docs.typesafe.ai/introduction/quickstart),
 [gym-super-mario-bros](https://github.com/Kautenja/gym-super-mario-bros),

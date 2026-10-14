@@ -91,13 +91,23 @@ def main():
     env = None
     policy = None
     try:
-        env = JoypadSpace(
-            gym_super_mario_bros.make(
+        try:
+            raw_env = gym_super_mario_bros.make(
                 env_id,
                 render_mode="rgb_array" if args.headless else "human",
-            ),
-            list(ACTIONS.values()),
-        )
+            )
+        except TypeError as exc:
+            if "render_mode" in str(exc):
+                parser.exit(
+                    1,
+                    f"Mario run failed: {exc}\n"
+                    "Incompatible gym-super-mario-bros version detected (requires >= 9.1.0 with Gymnasium).\n"
+                    "Ensure you have activated the mario-jev Conda environment:\n"
+                    "    conda activate mario-jev\n",
+                )
+            raise
+        env = JoypadSpace(raw_env, list(ACTIONS.values()))
+
         if args.dump_state:
             _, info = env.reset(seed=args.seed)
             print(
@@ -223,3 +233,8 @@ def main():
             policy.close()
         if env is not None:
             env.close()
+
+
+if __name__ == "__main__":
+    main()
+

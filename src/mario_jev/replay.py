@@ -37,12 +37,19 @@ def replay(path, headless=False, speed=1.0):
 
     config, decisions = load_replay(path)
     print(f"Replaying {Path(path).resolve()} without API calls")
-    env = JoypadSpace(
-        gym_super_mario_bros.make(
+    try:
+        raw_env = gym_super_mario_bros.make(
             config["env"], render_mode="rgb_array" if headless else "human"
-        ),
-        list(ACTIONS.values()),
-    )
+        )
+    except TypeError as exc:
+        if "render_mode" in str(exc):
+            raise RuntimeError(
+                f"Incompatible gym-super-mario-bros version ({exc}). "
+                "This project requires gym-super-mario-bros>=9.1.0 (Gymnasium). "
+                "Please activate the mario-jev Conda environment: conda activate mario-jev"
+            ) from exc
+        raise
+    env = JoypadSpace(raw_env, list(ACTIONS.values()))
     episode = None
     ended = False
     completed = False
