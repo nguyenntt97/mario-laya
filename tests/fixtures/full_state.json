@@ -1,0 +1,693 @@
+{
+  "coordinates": "Pixels. x increases right; y increases down. Mario y is the object origin; approximate feet at y+32, body top at y+16 small or y big; width about 16.",
+  "mario": {
+    "x": 722,
+    "y": 162,
+    "grounded": false,
+    "motion_state_raw": 1,
+    "vx_raw": 0,
+    "vy_raw": -5,
+    "status": "small",
+    "body_top_y": 178,
+    "feet_y": 194,
+    "width_px": 16,
+    "vx_px_per_frame": 0.0,
+    "vy_px_per_frame": -3.5,
+    "motion": "rising"
+  },
+  "terrain": {
+    "legend": "Columns of 13 metatile bytes, rows top-to-bottom at y=32+16*row. 0=empty; nonzero=terrain/object (not all are solid). Typical SMB1: 0x54 ground, 0x10/11 pipe tops, 0x51/52 bricks, 0xc0/c1 question blocks. Unreported columns are unknown.",
+    "columns": [
+      {
+        "dx": -50,
+        "tiles": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          84,
+          84
+        ]
+      },
+      {
+        "dx": -34,
+        "tiles": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          84,
+          84
+        ]
+      },
+      {
+        "dx": -18,
+        "tiles": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          84,
+          84
+        ]
+      },
+      {
+        "dx": -2,
+        "tiles": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          84,
+          84
+        ]
+      },
+      {
+        "dx": 14,
+        "tiles": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          18,
+          20,
+          20,
+          20,
+          84,
+          84
+        ]
+      },
+      {
+        "dx": 30,
+        "tiles": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          19,
+          21,
+          21,
+          21,
+          84,
+          84
+        ]
+      },
+      {
+        "dx": 46,
+        "tiles": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          84,
+          84
+        ]
+      },
+      {
+        "dx": 62,
+        "tiles": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          84,
+          84
+        ]
+      },
+      {
+        "dx": 78,
+        "tiles": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          84,
+          84
+        ]
+      },
+      {
+        "dx": 94,
+        "tiles": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          84,
+          84
+        ]
+      },
+      {
+        "dx": 110,
+        "tiles": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          84,
+          84
+        ]
+      }
+    ],
+    "summary": {
+      "nearest_obstacle": {
+        "distance_px": 0,
+        "top_y": 144,
+        "height_above_feet_px": 50
+      },
+      "nearest_empty_column_below_feet": null,
+      "overhead_clearance_px": null,
+      "note": "Empty columns below feet can be pits OR a drop to lower terrain outside the view. Distances use approximate body edges. Unknown/offscreen terrain is not safe ground."
+    }
+  },
+  "nearby_objects": [
+    {
+      "slot": 0,
+      "kind": "goomba",
+      "dx": -23,
+      "dy": 22,
+      "state_raw": 0,
+      "horizontal_gap_px": 0,
+      "vx_px_per_frame": 0.5,
+      "estimated_contact_in_frames": null,
+      "same_height": true,
+      "defeated": false
+    },
+    {
+      "slot": 1,
+      "kind": "goomba",
+      "dx": 83,
+      "dy": 22,
+      "state_raw": 0,
+      "horizontal_gap_px": 67,
+      "vx_px_per_frame": -0.75,
+      "estimated_contact_in_frames": 89.3,
+      "same_height": true,
+      "defeated": false
+    },
+    {
+      "slot": 2,
+      "kind": "goomba",
+      "dx": 107,
+      "dy": 22,
+      "state_raw": 0,
+      "horizontal_gap_px": 91,
+      "vx_px_per_frame": -0.5,
+      "estimated_contact_in_frames": 182.0,
+      "same_height": true,
+      "defeated": false
+    }
+  ],
+  "previous_action": "right_run_jump",
+  "jump_already_held": true,
+  "action_frames": 4,
+  "time_remaining": 385,
+  "nearest_threat": {
+    "slot": 1,
+    "kind": "goomba",
+    "dx": 83,
+    "dy": 22,
+    "state_raw": 0,
+    "horizontal_gap_px": 67,
+    "vx_px_per_frame": -0.75,
+    "estimated_contact_in_frames": 89.3,
+    "same_height": true,
+    "defeated": false
+  },
+  "recent_decisions": [
+    {
+      "before": {
+        "x": 603,
+        "y": 122,
+        "vx_px_per_frame": 3.0,
+        "vy_px_per_frame": -4.0,
+        "grounded": false,
+        "motion": "rising",
+        "feet_y": 154
+      },
+      "action": "right_run_jump",
+      "frames_held": 4,
+      "after": {
+        "x": 615,
+        "y": 108,
+        "vx_px_per_frame": 3.0,
+        "vy_px_per_frame": -3.5,
+        "grounded": false,
+        "motion": "rising",
+        "feet_y": 140
+      },
+      "events": [],
+      "landing_frame": null,
+      "reward": 11.0
+    },
+    {
+      "before": {
+        "x": 615,
+        "y": 108,
+        "vx_px_per_frame": 3.0,
+        "vy_px_per_frame": -3.5,
+        "grounded": false,
+        "motion": "rising",
+        "feet_y": 140
+      },
+      "action": "right_run_jump",
+      "frames_held": 4,
+      "after": {
+        "x": 627,
+        "y": 99,
+        "vx_px_per_frame": 3.0,
+        "vy_px_per_frame": -2.25,
+        "grounded": false,
+        "motion": "rising",
+        "feet_y": 131
+      },
+      "events": [],
+      "landing_frame": null,
+      "reward": 12.0
+    },
+    {
+      "before": {
+        "x": 627,
+        "y": 99,
+        "vx_px_per_frame": 3.0,
+        "vy_px_per_frame": -2.25,
+        "grounded": false,
+        "motion": "rising",
+        "feet_y": 131
+      },
+      "action": "right_run_jump",
+      "frames_held": 4,
+      "after": {
+        "x": 639,
+        "y": 93,
+        "vx_px_per_frame": 3.0,
+        "vy_px_per_frame": -1.5,
+        "grounded": false,
+        "motion": "rising",
+        "feet_y": 125
+      },
+      "events": [],
+      "landing_frame": null,
+      "reward": 12.0
+    },
+    {
+      "before": {
+        "x": 639,
+        "y": 93,
+        "vx_px_per_frame": 3.0,
+        "vy_px_per_frame": -1.5,
+        "grounded": false,
+        "motion": "rising",
+        "feet_y": 125
+      },
+      "action": "right_run_jump",
+      "frames_held": 4,
+      "after": {
+        "x": 651,
+        "y": 90,
+        "vx_px_per_frame": 3.0,
+        "vy_px_per_frame": -0.75,
+        "grounded": false,
+        "motion": "rising",
+        "feet_y": 122
+      },
+      "events": [],
+      "landing_frame": null,
+      "reward": 12.0
+    },
+    {
+      "before": {
+        "x": 651,
+        "y": 90,
+        "vx_px_per_frame": 3.0,
+        "vy_px_per_frame": -0.75,
+        "grounded": false,
+        "motion": "rising",
+        "feet_y": 122
+      },
+      "action": "right_run_jump",
+      "frames_held": 4,
+      "after": {
+        "x": 663,
+        "y": 93,
+        "vx_px_per_frame": 3.0,
+        "vy_px_per_frame": 0.75,
+        "grounded": false,
+        "motion": "falling",
+        "feet_y": 125
+      },
+      "events": [],
+      "landing_frame": null,
+      "reward": 12.0
+    },
+    {
+      "before": {
+        "x": 663,
+        "y": 93,
+        "vx_px_per_frame": 3.0,
+        "vy_px_per_frame": 0.75,
+        "grounded": false,
+        "motion": "falling",
+        "feet_y": 125
+      },
+      "action": "right_run_jump",
+      "frames_held": 4,
+      "after": {
+        "x": 675,
+        "y": 108,
+        "vx_px_per_frame": 3.0,
+        "vy_px_per_frame": 3.75,
+        "grounded": false,
+        "motion": "falling",
+        "feet_y": 140
+      },
+      "events": [],
+      "landing_frame": null,
+      "reward": 11.0
+    },
+    {
+      "before": {
+        "x": 675,
+        "y": 108,
+        "vx_px_per_frame": 3.0,
+        "vy_px_per_frame": 3.75,
+        "grounded": false,
+        "motion": "falling",
+        "feet_y": 140
+      },
+      "action": "right_run_jump",
+      "frames_held": 4,
+      "after": {
+        "x": 687,
+        "y": 128,
+        "vx_px_per_frame": 3.0,
+        "vy_px_per_frame": 5.0,
+        "grounded": false,
+        "motion": "falling",
+        "feet_y": 160
+      },
+      "events": [],
+      "landing_frame": null,
+      "reward": 12.0
+    },
+    {
+      "before": {
+        "x": 687,
+        "y": 128,
+        "vx_px_per_frame": 3.0,
+        "vy_px_per_frame": 5.0,
+        "grounded": false,
+        "motion": "falling",
+        "feet_y": 160
+      },
+      "action": "right_run_jump",
+      "frames_held": 4,
+      "after": {
+        "x": 699,
+        "y": 148,
+        "vx_px_per_frame": 3.0,
+        "vy_px_per_frame": 5.0,
+        "grounded": false,
+        "motion": "falling",
+        "feet_y": 180
+      },
+      "events": [],
+      "landing_frame": null,
+      "reward": 12.0
+    },
+    {
+      "before": {
+        "x": 699,
+        "y": 148,
+        "vx_px_per_frame": 3.0,
+        "vy_px_per_frame": 5.0,
+        "grounded": false,
+        "motion": "falling",
+        "feet_y": 180
+      },
+      "action": "right_run_jump",
+      "frames_held": 4,
+      "after": {
+        "x": 711,
+        "y": 168,
+        "vx_px_per_frame": 3.0,
+        "vy_px_per_frame": 5.0,
+        "grounded": false,
+        "motion": "falling",
+        "feet_y": 200
+      },
+      "events": [],
+      "landing_frame": null,
+      "reward": 12.0
+    },
+    {
+      "before": {
+        "x": 711,
+        "y": 168,
+        "vx_px_per_frame": 3.0,
+        "vy_px_per_frame": 5.0,
+        "grounded": false,
+        "motion": "falling",
+        "feet_y": 200
+      },
+      "action": "right_run_jump",
+      "frames_held": 2,
+      "after": {
+        "x": 717,
+        "y": 176,
+        "vx_px_per_frame": 3.0,
+        "vy_px_per_frame": 4.0,
+        "grounded": true,
+        "motion": "grounded",
+        "feet_y": 208
+      },
+      "events": [
+        "landed"
+      ],
+      "landing_frame": 2,
+      "reward": 6.0
+    },
+    {
+      "before": {
+        "x": 717,
+        "y": 176,
+        "vx_px_per_frame": 3.0,
+        "vy_px_per_frame": 4.0,
+        "grounded": true,
+        "motion": "grounded",
+        "feet_y": 208
+      },
+      "action": "right_run",
+      "frames_held": 4,
+      "after": {
+        "x": 722,
+        "y": 176,
+        "vx_px_per_frame": 1.25,
+        "vy_px_per_frame": 0.0,
+        "grounded": true,
+        "motion": "grounded",
+        "feet_y": 208
+      },
+      "events": [],
+      "landing_frame": null,
+      "reward": 4.0
+    },
+    {
+      "before": {
+        "x": 722,
+        "y": 176,
+        "vx_px_per_frame": 1.25,
+        "vy_px_per_frame": 0.0,
+        "grounded": true,
+        "motion": "grounded",
+        "feet_y": 208
+      },
+      "action": "right_run_jump",
+      "frames_held": 4,
+      "after": {
+        "x": 722,
+        "y": 162,
+        "vx_px_per_frame": 0.0,
+        "vy_px_per_frame": -3.5,
+        "grounded": false,
+        "motion": "rising",
+        "feet_y": 194
+      },
+      "events": [
+        "jump_started",
+        "possibly_blocked_horizontally"
+      ],
+      "landing_frame": null,
+      "reward": 0.0
+    }
+  ],
+  "blocked_forward": false,
+  "physics": {
+    "motion_estimate_interval_frames": 4,
+    "control": "A starts a jump only when grounded and previously released. Holding A during ascent increases height. Releasing A shortens the jump. B accelerates running; left brakes rightward motion. No new jump can start in midair.",
+    "timing": "At running speed Mario moves about 3 pixels/frame. Jump before contact: allow roughly 8-16 frames to gain clearance. A same-height enemy 25 pixels ahead is urgent; 50-70 pixels ahead is a reasonable jump approach. These are approximate guidance, not guaranteed safe trajectories."
+  },
+  "jump_corridor": {
+    "ceiling_spans": [
+      {
+        "start_dx": 14,
+        "end_dx": 46,
+        "bottom_y": 176,
+        "headroom_px": 2
+      }
+    ],
+    "low_ceiling_now": true,
+    "low_ceiling_before_nearest_threat": true,
+    "minimum_headroom_before_threat_px": 2,
+    "unknown_overhead_tiles": [],
+    "possible_recent_head_bump": false,
+    "visible_ahead_px": 126,
+    "note": "Spans are relative to Mario; headroom is maximum upward body travel before hitting that ceiling at the current height. A ceiling hit truncates ascent and can make Mario land BEFORE an enemy. This is geometry, not an exact jump simulation. No span outside the visible map means unknown, not clear sky."
+  },
+  "landing_surfaces": {
+    "surfaces": [
+      {
+        "start_dx": 14,
+        "end_dx": 46,
+        "top_y": 144,
+        "height_above_current_feet_px": 50
+      },
+      {
+        "start_dx": -50,
+        "end_dx": 14,
+        "top_y": 208,
+        "height_above_current_feet_px": -14
+      },
+      {
+        "start_dx": 46,
+        "end_dx": 126,
+        "top_y": 208,
+        "height_above_current_feet_px": -14
+      }
+    ],
+    "floor_gaps": [],
+    "note": "Candidate tops only, not reachable/safe landing predictions. Positive height_above_current_feet_px means a raised landing. Floor gaps mean empty bottom two tile rows; platforms may bridge them. Far-bank height is shown only when visible. Land on top of the far bank, not into its side. Unknown tiles/offscreen terrain are not safe support."
+  },
+  "current_jump": {
+    "takeoff_x": 722,
+    "takeoff_y": 176,
+    "takeoff_vx_px_per_frame": 1.25,
+    "elapsed_frames": 4,
+    "peak_height_px": 14,
+    "horizontal_distance_px": 0,
+    "height_above_takeoff_px": 14,
+    "phase": "rising",
+    "note": "Measured from action intervals; takeoff/landing timing has up to one action interval of uncertainty."
+  },
+  "last_jump": {
+    "takeoff_x": 567,
+    "takeoff_y": 176,
+    "takeoff_vx_px_per_frame": 3.0,
+    "elapsed_frames": 50,
+    "peak_height_px": 86,
+    "horizontal_distance_px": 150,
+    "height_above_takeoff_px": 0,
+    "phase": "grounded",
+    "note": "Measured from action intervals; takeoff/landing timing has up to one action interval of uncertainty.",
+    "landing_x": 717,
+    "landing_y": 176
+  },
+  "recent_frames": [
+    {
+      "x": 722,
+      "y": 176,
+      "grounded": true,
+      "vx_px_per_frame": 0,
+      "vy_px_per_frame": 0
+    },
+    {
+      "x": 722,
+      "y": 171,
+      "grounded": false,
+      "vx_px_per_frame": 0,
+      "vy_px_per_frame": -5
+    },
+    {
+      "x": 722,
+      "y": 166,
+      "grounded": false,
+      "vx_px_per_frame": 0,
+      "vy_px_per_frame": -5
+    },
+    {
+      "x": 722,
+      "y": 162,
+      "grounded": false,
+      "vx_px_per_frame": 0,
+      "vy_px_per_frame": -4
+    }
+  ]
+}

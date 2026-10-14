@@ -6,5 +6,8 @@ dependencies:
   - python=3.13
   - pip
   - pip:
+    # CUDA 12.8 PyTorch for the Laya backend (RTX 50-series needs cu128 or newer).
+    - --extra-index-url https://download.pytorch.org/whl/cu128
+    - torch
+    - -e third_party/laya
     - -e ".[dev]"
-

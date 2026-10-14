@@ -23,8 +23,20 @@ def positive(value):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--policy", choices=["jev", "scripted"], default="jev")
-    parser.add_argument("--model", default="jev-latest")
+    parser.add_argument("--policy", choices=["jev", "laya", "scripted"], default="jev")
+    parser.add_argument(
+        "--model",
+        help="Jev model (default: jev-latest) or Laya checkpoint: "
+        "english, multilingual, typed-decisions (default: english)",
+    )
+    parser.add_argument(
+        "--device", help="Laya torch device, e.g. cuda or cpu (default: auto)"
+    )
+    parser.add_argument(
+        "--laya-max-len",
+        type=positive,
+        help="Laya token budget per question (default: the checkpoint's own)",
+    )
     parser.add_argument(
         "--world", type=int, choices=range(1, 9), default=1, help="World (default: 1)"
     )
@@ -40,7 +52,7 @@ def main():
         "--decisions",
         type=positive,
         default=500,
-        help="Maximum decisions per episode (and API calls with Jev)",
+        help="Maximum decisions per episode (API calls with Jev; local with Laya)",
     )
     parser.add_argument("--episodes", type=positive, default=1)
     parser.add_argument(
@@ -64,6 +76,8 @@ def main():
         "--speed", type=positive, default=1, help="Replay speed multiplier (default: 1)"
     )
     args = parser.parse_args()
+    if args.model is None:
+        args.model = "english" if args.policy == "laya" else "jev-latest"
     env_id = f"SuperMarioBros-{args.world}-{args.stage}-v0"
     if args.replay:
         from .replay import replay
@@ -119,7 +133,15 @@ def main():
                 )
             )
             return
-        policy = JevPolicy(args.model) if args.policy == "jev" else ScriptedPolicy()
+        if args.policy == "jev":
+            policy = JevPolicy(args.model)
+        elif args.policy == "laya":
+            from .laya_policy import LayaPolicy
+
+            print(f"Loading Laya checkpoint {args.model!r}...")
+            policy = LayaPolicy(args.model, args.device, args.laya_max_len)
+        else:
+            policy = ScriptedPolicy()
         args.log_dir.mkdir(parents=True, exist_ok=True)
         path = args.log_dir / (
             datetime.now(UTC).strftime("%Y%m%dT%H%M%S%fZ") + ".jsonl"
@@ -136,6 +158,11 @@ def main():
                     "type": "config",
                     "policy": args.policy,
                     "model": args.model,
+                    **(
+                        {"device": args.device, "laya_max_len": args.laya_max_len}
+                        if args.policy == "laya"
+                        else {}
+                    ),
                     "frames": args.frames,
                     "decisions": args.decisions,
                     "episodes": args.episodes,
@@ -237,4 +264,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

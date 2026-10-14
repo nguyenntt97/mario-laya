@@ -14,6 +14,44 @@ ACTIONS = {
 }
 
 
+MOVEMENT_BUTTONS = {
+    "run_right": ["right", "B"],
+    "walk_right": ["right"],
+    "brake_left": ["left"],
+    "wait": [],
+}
+
+
+def compose_action(state, movement, start, sustain, ceiling_hop):
+    """Combine movement and jump answers into one ACTIONS name plus decision details."""
+    corridor = state.get("jump_corridor", {})
+    summary = state.get("terrain", {}).get("summary", {})
+    ceiling_approach = bool(
+        corridor.get("low_ceiling_before_nearest_threat")
+        and not summary.get("nearest_obstacle")
+        and not summary.get("nearest_empty_column_below_feet")
+    )
+    start_timing = ceiling_hop if ceiling_approach else start
+    grounded = state["mario"]["grounded"]
+    jump = (
+        (start_timing >= 0.5 and not state["jump_already_held"])
+        if grounded
+        else sustain >= 0.5
+    )
+    buttons = MOVEMENT_BUTTONS[movement]
+    if jump:
+        buttons = [*buttons, "A"]
+    action = next(name for name, candidate in ACTIONS.items() if candidate == buttons)
+    return action, {
+        "movement": movement,
+        "start_jump": start,
+        "ceiling_hop": ceiling_hop,
+        "jump_timing_source": "ceiling_hop" if ceiling_approach else "start_jump",
+        "sustain_jump": sustain,
+        "jump_pressed": jump,
+    }
+
+
 class JevPolicy:
     def __init__(self, model="jev-latest"):
         self.client = TypeSafeClient(
@@ -43,48 +81,17 @@ class JevPolicy:
     def choose(self, state):
         response = self.client.system_one(state=state, questions=self.questions)
         movement = response.answers["movement"]
-        start = response.answers["start_jump"].noul
-        sustain = response.answers["sustain_jump"].noul
-        corridor = state.get("jump_corridor", {})
-        summary = state.get("terrain", {}).get("summary", {})
-        ceiling_approach = bool(
-            corridor.get("low_ceiling_before_nearest_threat")
-            and not summary.get("nearest_obstacle")
-            and not summary.get("nearest_empty_column_below_feet")
-        )
-        ceiling_hop = response.answers["ceiling_hop"].noul
-        if ceiling_approach:
-            start = ceiling_hop
-        grounded = state["mario"]["grounded"]
-        jump = (
-            (start >= 0.5 and not state["jump_already_held"])
-            if grounded
-            else sustain >= 0.5
-        )
-        buttons = {
-            "run_right": ["right", "B"],
-            "walk_right": ["right"],
-            "brake_left": ["left"],
-            "wait": [],
-        }[movement.choice]
-        if jump:
-            buttons = [*buttons, "A"]
-        action = next(
-            name for name, candidate in ACTIONS.items() if candidate == buttons
+        action, decisions = compose_action(
+            state,
+            movement.choice,
+            response.answers["start_jump"].noul,
+            response.answers["sustain_jump"].noul,
+            response.answers["ceiling_hop"].noul,
         )
         return action, {
             "confidence": movement.confidence,
             "probabilities": dict(movement.probabilities),
-            "decisions": {
-                "movement": movement.choice,
-                "start_jump": response.answers["start_jump"].noul,
-                "ceiling_hop": ceiling_hop,
-                "jump_timing_source": "ceiling_hop"
-                if ceiling_approach
-                else "start_jump",
-                "sustain_jump": sustain,
-                "jump_pressed": jump,
-            },
+            "decisions": decisions,
             "model": response.model,
             "usage": {
                 "input_tokens": response.usage.input_tokens,

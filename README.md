@@ -4,6 +4,7 @@ A Python prototype that plays NES Super Mario Bros. (level 1-1 by default).
 Jev receives structured RAM observations and answers focused questions about movement, starting a jump, and sustaining
 a jump, plus timing hops under low ceilings. Code composes their answers into controller buttons.
 The emulator pauses while Jev responds, then advances up to four game frames by default, stopping early on landing.
+A local [Laya](https://github.com/NandhaKishorM/laya) backend answers the same questions on your own GPU, with no API key.
 The resizable game window opens at 800×600 by default. No JavaScript is required.
 
 ## Setup
@@ -11,16 +12,23 @@ The resizable game window opens at 800×600 by default. No JavaScript is require
 Create and activate the Conda environment:
 
 ```sh
+git submodule update --init
 conda env create -f environment.yml
 conda activate mario-jev
 cp .env.example .env
 ```
+
+The environment includes CUDA 12.8 PyTorch and the `third_party/laya` submodule for
+the Laya backend.
 
 Alternatively, if you already have an existing Python 3.13 environment:
 
 ```sh
 pip install -e ".[dev]"
 cp .env.example .env
+
+# Optional Laya backend (install a CUDA PyTorch build first if you want the GPU)
+pip install -e ".[laya]"
 ```
 
 Put your TypeSafe key in `.env`:
@@ -86,6 +94,39 @@ retries disabled; an API error stops gameplay instead of consuming more requests
 Every Jev decision is a paid API request. `--decisions` limits calls per episode;
 `--episodes` multiplies that limit. No API key is needed for the scripted policy
 or state dump.
+
+## Laya backend
+
+`--policy laya` asks the Jev question set to a local Laya checkpoint instead of the
+TypeSafe API. There is no API key and no per-call cost. The first run downloads the
+checkpoint into the Hugging Face cache (set `HF_HUB_CACHE` to move it).
+
+```sh
+mario-jev --policy laya --decisions 500
+
+# Pick a checkpoint: english (default), multilingual, typed-decisions
+mario-jev --policy laya --model typed-decisions --headless
+
+# Force a device or raise the token budget
+mario-jev --policy laya --device cpu --laya-max-len 1024
+```
+
+Laya reads at most 512 tokens per question by default (1,024 for `typed-decisions`),
+and the question text gets about 192 of those. Laya cuts off whatever does not fit. So
+`laya_policy.py` uses shorter questions and a compact state (`laya_state`): hazards come
+first, null fields are left out, and only the last two transitions are kept. The full
+observation is still logged, and each decision record also contains the `laya_state`
+that was sent plus `usage.state_tokens`/`usage.truncated`, so you can check that nothing
+was cut off. The largest recorded state uses about 300 tokens. Answers go through the
+same button logic as Jev (`compose_action`), including the low-ceiling hop override.
+On an RTX 5090, a decision takes about 15 ms.
+
+Laya runs zero-shot here: it has not been trained on Mario. In a first headless 1-1
+run, the `english` checkpoint reached x=686 before dying, where the scripted baseline
+reached 1680. Its `sustain_jump` answers stay high, so A is often still held when Mario
+lands and the next jump is not armed in time. `typed-decisions` and `multilingual` gave
+less informative answers on recorded states. Fine-tuning on gameplay logs is the likely
+way to improve this.
 
 ## Replay
 
@@ -194,11 +235,13 @@ ruff format --check src tests
 - `src/mario_jev/state.py`: SMB1 memory decoding and terrain geometry
 - `src/mario_jev/history.py`: bounded transition history and jump tracking
 - `src/mario_jev/runner.py`: per-frame observations and landing interruptions
-- `src/mario_jev/policy.py`: Jev choices, button mappings, and scripted baseline
+- `src/mario_jev/policy.py`: Jev choices, shared button logic (`compose_action`), and scripted baseline
+- `src/mario_jev/laya_policy.py`: local Laya backend, compact state, and condensed questions
 - `environment.yml`: Conda environment definition
 - `requirements.txt`: pip package dependencies
 
 References: [TypeSafe SDK quick start](https://docs.typesafe.ai/introduction/quickstart),
+[Laya](https://github.com/NandhaKishorM/laya),
 [gym-super-mario-bros](https://github.com/Kautenja/gym-super-mario-bros),
 [SMB1 memory definitions](https://github.com/threecreepio/smb-disassembly/blob/master/src/smb.asm).
 The installed emulator package supplies its game assets; this repository does

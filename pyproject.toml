@@ -19,6 +19,9 @@ Author = "https://x.com/shantanugoel"
 mario-jev = "mario_jev:main"
 
 [project.optional-dependencies]
+laya = [
+    "laya>=0.4.7",
+]
 dev = [
     "pytest>=9.1.1",
     "ruff>=0.16.8",
